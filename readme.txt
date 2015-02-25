@@ -15,9 +15,9 @@ A BuddyPress plugin that creates Gravatar avatars for any user without one, and 
 
 BP Local Avatars is a BuddyPress plugin.
 
-Do you have members on your BuddyPress site who don’t have an Avatar?
-And you don’t want to show the generic default avatar?
-Or maybe you don’t want each page view to include a lot of calls to gravatar.com to load avatars?
+Do you have members on your BuddyPress site who do not have an Avatar?
+And you do not want to show the generic default avatar?
+Or maybe you do not want each page view to include a lot of calls to gravatar.com to load avatars?
 
 This plugin will create a Gravatar Identicon avatar, thumb and full versions, for any user who does not already have an Avatar, and save it locally.
 Supports user creation, user registration, user login, and Bulk Generation.
