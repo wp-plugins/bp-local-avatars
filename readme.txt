@@ -6,7 +6,7 @@ Author URI: http://philopress.com/contact/
 Plugin URI: http://philopress.com/products/
 Requires at least: WP 4.0, BP 2.0
 Tested up to: WP 4.1, BP 2.2.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 
 A BuddyPress plugin that creates Gravatar avatars for any user without one, and stores them locally.
@@ -15,28 +15,26 @@ A BuddyPress plugin that creates Gravatar avatars for any user without one, and 
 
 BP Local Avatars is a BuddyPress plugin.
 
-Do you have members on your BuddyPress site who don’t have an Avatar?
-And you don’t want to show the generic default avatar?
-Or maybe you don’t want each page view to include a lot of calls to gravatar.com to load avatars?
+Do you have members on your BuddyPress site who do not have an Avatar?
+And you do not want to show the generic default avatar?
+Or maybe you do not want each page view to include a lot of calls to gravatar.com to load avatars?
 
-This plugin will create a Gravatar Identicon avatar, thumb and full versions, for any user who does not already have an Avatar, and save it locally.
-Supports user creation, user registration, user login, and Bulk Generation.
-Uses the existing BuddyPress avatar directory structure.
-Conforms to the defined sizes for BuddyPress thumb and full avatars.
-Users can still upload an avatar via their profile.
+* This plugin will create a Gravatar Identicon avatar, thumb and full versions, for any user who does not already have an Avatar, and save it locally.
+* Supports user creation, user registration, user login, and Bulk Generation.
+* Uses the existing BuddyPress avatar directory structure.
+* Conforms to the defined sizes for BuddyPress thumb and full avatars.
+* Users can still upload an avatar via their profile.
 
 
-How To Use:
+Usage:
 
 1. Provides an option in wp-admin under:
-Settings -> Discussion > Default Avatar > BuddyPress Identicon (Generated and Stored Locally)
-Select and Save. Otherwise this plugin will not do anything.
-After saving, you will see a link to 'Bulk Generate' avatars for all users who do not have a local avatar.
-If a user already has their own Gravatar, it will save it locally.
+Settings -> Discussion > Default Avatar > BuddyPress Identicon (Generated and Stored Locally). 
 
-2. Will create an avatar and store it locally whenever a new user registers or is created via the Dashboard.
+2. Select and Save. Otherwise this plugin will not do anything.
 
-3. Will create an avatar and store it locally whenever a user logs in - if an Avatar does not already exist.
+3. After saving, you will see a link to 'Bulk Generate' avatars for all users who do not have a local avatar. If a user already has their own Gravatar, it will save it locally.
+
 
 For more BuddyPress plugins, please visit http://www.philopress.com/
 
