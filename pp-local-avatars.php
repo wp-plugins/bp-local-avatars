@@ -37,7 +37,7 @@ function pp_add_avatar_default_option_img( $avatar_list ) {
 
 	$str = 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1';
 
-	$icon = plugins_url( 'assets/icon.png', __FILE__ );
+	$icon = plugins_url( 'icon.png', __FILE__ );
 
 	$avatar_list = str_replace($str, $icon, $avatar_list);
 
