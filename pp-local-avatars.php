@@ -3,7 +3,8 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// setup the additions to Settings > Discussion > Avatars
+
+// settings in wp-admin
 function pp_add_settings() {
 
 	$show = get_option('show_avatars');
@@ -37,7 +38,7 @@ function pp_add_avatar_default_option_img( $avatar_list ) {
 
 	$str = 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1';
 
-	$icon = plugins_url( 'icon.png', __FILE__ );
+	$icon = plugins_url( 'assets/icon.png', __FILE__ );
 
 	$avatar_list = str_replace($str, $icon, $avatar_list);
 
@@ -74,47 +75,48 @@ function pp_generate_avatars_callback( $arg ) {
 <?php
 }
 
-// bulk generation of avatars from Settings > Discussion > Avatars
-function pp_bulk_generation() {
-	global $pp_local_avatar_instance;
-
-	echo '<h4>Generating Avatars...</h4>';
-
-	$users = get_users( array( 'fields' => 'ID' ) );
-
-	foreach ( $users as $user ) {
-
-		$pp_local_avatar_instance->create( $user );
-
-	}
-
-	echo '<h4>Finished.</h4>';
-}
 
 
+/**
+ * create class instance 
+ * maybe bulk generate avatars
+ * uses the bp_core_set_avatar_globals hook via bp_setup_globals
+ */
+ 
 function pp_load_class() {
-	global $pp_local_avatar_instance;
 
 	$default = get_option('avatar_default');
 
 	if( $default == 'identicon_local' )
-		$pp_local_avatar_instance = new BP_Local_Avatars();
+		$pp_local_avatar_instance = new PP_Local_Avatars();
 
 
-	if( isset( $_GET['task'] ) && $_GET['task'] == 'bulk-generate' ) {
-
-		if ( ! wp_verify_nonce($_GET['pp_nonce'], 'bulk_gen') )
-			die( 'Security check' );
-		else 
-			pp_bulk_generation();
+	if( is_admin() ) { 
 	
+		if( isset( $_GET['task'] ) && $_GET['task'] == 'bulk-generate' ) {
+	
+			if ( ! wp_verify_nonce($_GET['pp_nonce'], 'bulk_gen') )
+				die( 'Security check' );
+				
+			else {
+			
+				echo '<h4>Generating Avatars...</h4>';
+			
+				$users = get_users( array( 'fields' => 'ID' ) );
+			
+				foreach ( $users as $user ) 
+					$pp_local_avatar_instance->create( $user );
+			
+				echo '<h4>Finished.</h4>';
+				
+			}
+		}
 	}
-
 }
 add_action( 'bp_core_set_avatar_globals', 'pp_load_class', 100 );
 
 
-class BP_Local_Avatars {
+class PP_Local_Avatars {
 
 	public $upload_dir;
 
@@ -138,11 +140,11 @@ class BP_Local_Avatars {
 		$this->create( $user_id );
 	}
 
-	// Creates a Gravatar identicon if no local avatar exists
+	// Creates an identicon if no local avatar exists
 	public function create( $user_id ) {
 		global $wpdb; 
 		
-		// Bail if an avatar already exists for this user
+		// Bail if an avatar already exists for this user.
 		if ( $this->has_avatar( $user_id ) )
 			return;
 
@@ -197,7 +199,7 @@ class BP_Local_Avatars {
 			return true;
 	}
 
-	// Disable Gravatar calls in bp_core_fetch_avatar()
+	// Disables Gravatar.
 	function no_grav() {
 		return true;
 	}
