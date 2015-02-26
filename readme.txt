@@ -6,7 +6,7 @@ Author URI: http://philopress.com/contact/
 Plugin URI: http://philopress.com/products/
 Requires at least: WP 4.0, BP 2.0
 Tested up to: WP 4.1, BP 2.2.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 
 A BuddyPress plugin that creates Gravatar avatars for any user without one, and stores them locally.
@@ -67,8 +67,16 @@ For more BuddyPress plugins, please visit http://www.philopress.com/
 = 1.0 =
 * Initial release
 
+= 1.1 =
+* readme spelling
+
+= 1.2 =
+* remove global
+
 == Upgrade Notice ==
 
 = 1.0 =
 
+= 1.2 =
+Remove global
 
