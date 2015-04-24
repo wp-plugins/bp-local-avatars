@@ -36,11 +36,11 @@ function pp_add_avatar_default_option( $avatar_defaults ) {
 // add an icon to the option in Settings > Discussion > Avatars
 function pp_add_avatar_default_option_img( $avatar_list ) {
 
-	$str = 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1';
+	$str_array = array( 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=64&amp;d=identicon_local&amp;r=g&amp;forcedefault=1 2x',  'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1' );
 
 	$icon = plugins_url( 'icon.png', __FILE__ );
 
-	$avatar_list = str_replace($str, $icon, $avatar_list);
+	$avatar_list = str_ireplace($str_array, $icon, $avatar_list);
 
 	return $avatar_list;
 
@@ -101,7 +101,7 @@ function pp_load_class() {
 
 			else {
 
-				echo '<h4>Generating Avatars...</h4>';
+				//echo '<h4>Generating Avatars...</h4>';
 
 				$users = get_users( array( 'fields' => 'ID' ) );
 
@@ -115,7 +115,7 @@ function pp_load_class() {
 					$pp_local_avatar_instance->group_create( $group_id );
 
 
-				echo '<h4>Finished.</h4>';
+				//echo '<h4>Finished.</h4>';
 
 			}
 		}
