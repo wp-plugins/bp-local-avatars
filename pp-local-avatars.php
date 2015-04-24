@@ -17,7 +17,7 @@ function pp_add_settings() {
 
 		$default_avatar = get_option('avatar_default');
 
-		if( $default_avatar == 'identicon_local' ) 
+		if( $default_avatar == 'identicon_local' )
 			pp_add_settings_section();
 
 	}
@@ -36,11 +36,11 @@ function pp_add_avatar_default_option( $avatar_defaults ) {
 // add an icon to the option in Settings > Discussion > Avatars
 function pp_add_avatar_default_option_img( $avatar_list ) {
 
-	$str = 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1';
+	$str_array = array( 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=64&amp;d=identicon_local&amp;r=g&amp;forcedefault=1 2x',  'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1' );
 
-	$icon = plugins_url( 'assets/icon.png', __FILE__ );
+	$icon = plugins_url( 'icon.png', __FILE__ );
 
-	$avatar_list = str_replace($str, $icon, $avatar_list);
+	$avatar_list = str_ireplace($str_array, $icon, $avatar_list);
 
 	return $avatar_list;
 
@@ -63,7 +63,7 @@ function pp_generate_avatars_callback( $arg ) {
 	<th scope="row"><?php _e('BuddyPress Avatars'); ?></th>
 	<td><fieldset>
 		<label for="gen_avatars">
-			Generate Identicons and store them locally for all BuddyPress members without an Avatar. <br/><br/>
+			Generate Identicons and store them locally for all BP Members and Groups without an Avatar. <br/><br/>
 			If you have a large number of members without Avatars, <em>this may take too long</em>. <br/><br/>
 
 		    <a href="<?php print wp_nonce_url(admin_url('options-discussion.php?task=bulk-generate'), 'bulk_gen', 'pp_nonce');?>">Generate Identicons</a>
@@ -78,12 +78,13 @@ function pp_generate_avatars_callback( $arg ) {
 
 
 /**
- * create class instance 
+ * create class instance
  * maybe bulk generate avatars
  * uses the bp_core_set_avatar_globals hook via bp_setup_globals
  */
- 
+
 function pp_load_class() {
+	global $wpdb, $bp;
 
 	$default = get_option('avatar_default');
 
@@ -91,24 +92,31 @@ function pp_load_class() {
 		$pp_local_avatar_instance = new PP_Local_Avatars();
 
 
-	if( is_admin() ) { 
-	
+	if( is_admin() ) {
+
 		if( isset( $_GET['task'] ) && $_GET['task'] == 'bulk-generate' ) {
-	
+
 			if ( ! wp_verify_nonce($_GET['pp_nonce'], 'bulk_gen') )
 				die( 'Security check' );
-				
+
 			else {
-			
-				echo '<h4>Generating Avatars...</h4>';
-			
+
+				//echo '<h4>Generating Avatars...</h4>';
+
 				$users = get_users( array( 'fields' => 'ID' ) );
-			
-				foreach ( $users as $user ) 
+
+				foreach ( $users as $user )
 					$pp_local_avatar_instance->create( $user );
-			
-				echo '<h4>Finished.</h4>';
+
+
+				$group_ids = $wpdb->get_col( "SELECT id FROM {$wpdb->prefix}bp_groups" );
 				
+				foreach ( $group_ids as $group_id )
+					$pp_local_avatar_instance->group_create( $group_id );
+
+
+				//echo '<h4>Finished.</h4>';
+
 			}
 		}
 	}
@@ -118,12 +126,14 @@ add_action( 'bp_core_set_avatar_globals', 'pp_load_class', 100 );
 
 class PP_Local_Avatars {
 
-	public $upload_dir;
-
+	private $upload_dir;
+	private $group_upload_dir;
+	
 	function __construct() {
 
 		$this->upload_dir = bp_core_avatar_upload_path() . '/avatars';
-
+		$this->group_upload_dir = bp_core_avatar_upload_path() . '/group-avatars';
+		
 		add_action( 'wp_login', array( $this, 'login' ), 10, 2 );
 
 		add_action( 'user_register', array( $this, 'register' ) );
@@ -142,8 +152,8 @@ class PP_Local_Avatars {
 
 	// Creates an identicon if no local avatar exists
 	public function create( $user_id ) {
-		global $wpdb; 
-		
+		global $wpdb;
+
 		// Bail if an avatar already exists for this user.
 		if ( $this->has_avatar( $user_id ) )
 			return;
@@ -151,7 +161,7 @@ class PP_Local_Avatars {
 		wp_mkdir_p( $this->upload_dir . '/' . $user_id );
 
 		$user_email = $wpdb->get_var( "SELECT user_email FROM $wpdb->users WHERE ID = $user_id" );
-		
+
 		// thumbnail
 		$dim = BP_AVATAR_THUMB_WIDTH;
 		$url = $this->gravatar_url( $user_email, $dim, 'identicon', 'g' );
@@ -168,6 +178,34 @@ class PP_Local_Avatars {
 
 	}
 
+	// Creates a Group identicon if no Group avatar exists
+	public function group_create( $group_id ) {
+
+		// Bail if an avatar already exists for this group.
+		if ( $this->group_has_avatar( $group_id ) )
+			return;
+
+		wp_mkdir_p( $this->group_upload_dir . '/' . $group_id );
+
+		$fake_email = uniqid('', true) . '@gmail.com';
+
+		// thumbnail
+		$dim = BP_AVATAR_THUMB_WIDTH;
+		$url = $this->gravatar_url( $fake_email, $dim, 'identicon', 'g' );
+
+		$path = $this->group_upload_dir . '/' . $group_id . '/' . $group_id . '-bpthumb.jpg';
+		copy($url, $path);  //NOTE:  requires allow_url_fopen set to true
+
+		// full size
+		$dim = BP_AVATAR_FULL_WIDTH;
+		$url = $this->gravatar_url( $fake_email, $dim, 'identicon', 'g' );
+
+		$path = $this->group_upload_dir . '/' . $group_id . '/' . $group_id . '-bpfull.jpg';
+		copy($url, $path);  //NOTE:  requires allow_url_fopen set to true
+
+	}	
+	
+	
 	/**
 	 * Generate a Gravatar URL for a specified email address
 	 * @param string $email The email address
@@ -199,6 +237,17 @@ class PP_Local_Avatars {
 			return true;
 	}
 
+	// Checks if a given Group has  avatar dir
+	private function group_has_avatar( $group_id ) {
+
+		$dir_path = $this->group_upload_dir . '/' . $group_id;
+
+		if ( ! file_exists( $dir_path ) )
+			return false;
+		else
+			return true;
+	}	
+	
 	// Disables Gravatar.
 	function no_grav() {
 		return true;
