@@ -2,7 +2,7 @@
 /*
 Plugin Name: BP Local Avatars
 Description: Requires BuddyPress. Adds an option to create Identicon Avatars and store them locally.
-Version: 1.7
+Version: 1.8
 Author: PhiloPress
 Author URI: http://philopress.com/
 */

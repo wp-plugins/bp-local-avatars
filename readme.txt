@@ -5,8 +5,8 @@ Tags: BuddyPress, members, groups, avatars, gravatars
 Author URI: http://philopress.com/contact/
 Plugin URI: http://philopress.com/products/
 Requires at least: WP 4.0, BP 2.0
-Tested up to: WP 4.2.2, BP 2.3
-Stable tag: 1.7
+Tested up to: WP 4.2.2, BP 2.3.1
+Stable tag: 1.8
 License: GPLv2 or later
 
 A BuddyPress plugin that creates Gravatar avatars for any user or group without one, and stores them locally.
@@ -86,6 +86,9 @@ Tested with WP 4.2, adds check for BP, on deactivation will reset default avatar
 = 1.7 =
 Tweak for icon in Settings > Discussion > Default Avatar option
 
+= 1.8 =
+Add admin notice after avatars are generated
+
 == Upgrade Notice ==
 
 = 1.0 =
@@ -104,3 +107,6 @@ Tested with WP 4.2, adds check for BP, on deactivation will reset default avatar
 
 = 1.7 =
 Tweak for icon in Settings > Discussion > Default Avatar option
+
+= 1.8 =
+Add admin notice after avatars are generated

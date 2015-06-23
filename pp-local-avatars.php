@@ -5,28 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 // settings in wp-admin
-function pp_add_settings() {
+function pp_lc_add_settings() {
 
 	$show = get_option('show_avatars');
 
 	if( $show ) {
 
-		add_filter( 'avatar_defaults', 'pp_add_avatar_default_option', 11, 1 );
+		add_filter( 'avatar_defaults', 'pp_lc_add_avatar_default_option', 11, 1 );
 
-		add_filter( 'default_avatar_select', 'pp_add_avatar_default_option_img', 11, 1 );
+		add_filter( 'default_avatar_select', 'pp_lc_add_avatar_default_option_img', 11, 1 );
 
 		$default_avatar = get_option('avatar_default');
 
 		if( $default_avatar == 'identicon_local' )
-			pp_add_settings_section();
+			pp_lc_add_settings_section();
 
 	}
 
 }
-add_action('admin_init', 'pp_add_settings');
+add_action('admin_init', 'pp_lc_add_settings');
 
 // add an option in Settings > Discussion > Avatars
-function pp_add_avatar_default_option( $avatar_defaults ) {
+function pp_lc_add_avatar_default_option( $avatar_defaults ) {
 
 	$avatar_defaults['identicon_local'] =  __('BuddyPress Identicon (Generated and Stored Locally)');
 
@@ -34,7 +34,7 @@ function pp_add_avatar_default_option( $avatar_defaults ) {
 }
 
 // add an icon to the option in Settings > Discussion > Avatars
-function pp_add_avatar_default_option_img( $avatar_list ) {
+function pp_lc_add_avatar_default_option_img( $avatar_list ) {
 
 	$str_array = array( 'http://0.gravatar.com/avatar/ffd294ab5833ba14aaf175f9acc71cc4?s=64&amp;d=identicon_local&amp;r=g&amp;forcedefault=1 2x', 'http://0.gravatar.com/avatar/ffd294ab5833ba14aaf175f9acc71cc4?s=32&amp;d=identicon_local&amp;r=g&amp;forcedefault=1', 'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=64&amp;d=identicon_local&amp;r=g&amp;forcedefault=1 2x',  'http://1.gravatar.com/avatar/1ea18284b39b7e184779ea1ddc5f4ee2?s=32&amp;d=identicon_local&amp;r=G&amp;forcedefault=1' );
 
@@ -47,16 +47,16 @@ function pp_add_avatar_default_option_img( $avatar_list ) {
 }
 
 // Add Bulk Generation section to Settings > Discussion > Avatars
-function pp_add_settings_section() {
+function pp_lc_add_settings_section() {
 	add_settings_section(
 		'generate_avatars',
 		'Bulk Generate',
-		'pp_generate_avatars_callback',
+		'pp_lc_generate_avatars_callback',
 		'discussion'
 	);
 }
 
-function pp_generate_avatars_callback( $arg ) {
+function pp_lc_generate_avatars_callback( $arg ) {
 ?>
 	<table class="form-table">
 	<tr>
@@ -83,7 +83,7 @@ function pp_generate_avatars_callback( $arg ) {
  * uses the bp_core_set_avatar_globals hook via bp_setup_globals
  */
 
-function pp_load_class() {
+function pp_lc_load_class() {
 	global $wpdb, $bp;
 
 	$default = get_option('avatar_default');
@@ -101,8 +101,6 @@ function pp_load_class() {
 
 			else {
 
-				//echo '<h4>Generating Avatars...</h4>';
-
 				$users = get_users( array( 'fields' => 'ID' ) );
 
 				foreach ( $users as $user )
@@ -114,15 +112,23 @@ function pp_load_class() {
 				foreach ( $group_ids as $group_id )
 					$pp_local_avatar_instance->group_create( $group_id );
 
-
-				//echo '<h4>Finished.</h4>';
+				wp_redirect( admin_url( '/options-discussion.php?avs_gen=1' ) );
+				exit;
 
 			}
 		}
 	}
 }
-add_action( 'bp_core_set_avatar_globals', 'pp_load_class', 100 );
+add_action( 'bp_core_set_avatar_globals', 'pp_lc_load_class', 100 );
 
+
+function pp_lc_avatars_admin_notice() {
+
+    if ( ! empty( $_GET['avs_gen'] ) ) {
+        echo '<div class="updated"><p>Avatars have been generated.</p></div>';
+    }
+}
+add_action('admin_notices', 'pp_lc_avatars_admin_notice');
 
 class PP_Local_Avatars {
 
