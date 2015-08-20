@@ -1,29 +1,30 @@
 === BP Local Avatars ===
 Contributors: shanebp
 Donate link: http://www.philopress.com/donate/
-Tags: BuddyPress, members, avatars, gravatars
+Tags: BuddyPress, members, groups, avatars, gravatars
 Author URI: http://philopress.com/contact/
 Plugin URI: http://philopress.com/products/
 Requires at least: WP 4.0, BP 2.0
-Tested up to: WP 4.1, BP 2.2.1
-Stable tag: 1.2
+Tested up to: WP 4.3
+Stable tag: 1.9
 License: GPLv2 or later
 
-A BuddyPress plugin that creates Gravatar avatars for any user without one, and stores them locally.
+A BuddyPress plugin that creates Gravatar avatars for any user or group without one, and stores them locally.
 
 == Description ==
 
 BP Local Avatars is a BuddyPress plugin.
 
-Do you have members on your BuddyPress site who do not have an Avatar?
+Do you have members or groups on your BuddyPress site who do not have an Avatar?
 And you do not want to show the generic default avatar?
 Or maybe you do not want each page view to include a lot of calls to gravatar.com to load avatars?
 
 * This plugin will create a Gravatar Identicon avatar, thumb and full versions, for any user who does not already have an Avatar, and save it locally.
-* Supports user creation, user registration, user login, and Bulk Generation.
+* Supports user creation, user registration, user login, and Bulk Generation for user and groups.
 * Uses the existing BuddyPress avatar directory structure.
 * Conforms to the defined sizes for BuddyPress thumb and full avatars.
 * Users can still upload an avatar via their profile.
+* Groups can still upload an avatar via Group > Manage > Photo.
 
 
 Usage:
@@ -33,7 +34,7 @@ Settings -> Discussion > Default Avatar > BuddyPress Identicon (Generated and St
 
 2. Select and Save. Otherwise this plugin will not do anything.
 
-3. After saving, you will see a link to 'Bulk Generate' avatars for all users who do not have a local avatar. If a user already has their own Gravatar, it will save it locally.
+3. After saving, you will see a link to 'Bulk Generate' avatars for all users and groups who do not have a local avatar. If a user already has their own Gravatar, it will save it locally.
 
 
 For more BuddyPress plugins, please visit http://www.philopress.com/
@@ -73,6 +74,24 @@ For more BuddyPress plugins, please visit http://www.philopress.com/
 = 1.2 =
 * remove global
 
+= 1.4 =
+Tested with WP 4.1.1
+
+= 1.5 =
+Added support for Group avatars
+
+= 1.6 =
+Tested with WP 4.2, adds check for BP, on deactivation will reset default avatar to Mystery
+
+= 1.7 =
+Tweak for icon in Settings > Discussion > Default Avatar option
+
+= 1.8 =
+Add admin notice after avatars are generated
+
+= 1.9 =
+Tested in WP 4.3
+
 == Upgrade Notice ==
 
 = 1.0 =
@@ -80,3 +99,20 @@ For more BuddyPress plugins, please visit http://www.philopress.com/
 = 1.2 =
 Remove global
 
+= 1.4 =
+Tested with WP 4.1.1
+
+= 1.5 =
+Added support for Group avatars
+
+= 1.6 =
+Tested with WP 4.2, adds check for BP, on deactivation will reset default avatar to Mystery
+
+= 1.7 =
+Tweak for icon in Settings > Discussion > Default Avatar option
+
+= 1.8 =
+Add admin notice after avatars are generated
+
+= 1.9 =
+Tested in WP 4.3
